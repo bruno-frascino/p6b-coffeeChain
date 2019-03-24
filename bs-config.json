@@ -1,0 +1,5 @@
+{
+  "server": {
+    "baseDir": ["./","./src", "./p6b-coffeeChain/build/contracts"]
+  }
+}

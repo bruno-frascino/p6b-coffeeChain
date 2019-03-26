@@ -48,7 +48,7 @@ contract RoasterRole {
 
   // Define an internal function '_removeRoaster' to remove this role, called by 'removeRoaster'
   function _removeRoaster(address account) internal {
-    Roasters.remove(account);
+    roasters.remove(account);
     emit RoasterRemoved(account);
   }
 }

@@ -1,13 +1,9 @@
 pragma solidity ^0.4.24;
 
-import "../coffeeaccesscontrol/GrowerRole.sol";
-import "../coffeeaccesscontrol/IntermediaryRole.sol";
-import "../coffeeaccesscontrol/RoasterRole.sol";
-import "../coffeeaccesscontrol/RetailerRole.sol";
-import "../coffeeaccesscontrol/ConsumerRole.sol";
+import "../coffeecore/Ownable.sol";
 
 // Define a contract 'Supplychain'
-contract SupplyChain is GrowerRole, IntermediaryRole, RoasterRole, RetailerRole, ConsumerRole {
+contract SupplyChain is Ownable {
 
   // Define 'owner'
   //address owner;
@@ -28,14 +24,17 @@ contract SupplyChain is GrowerRole, IntermediaryRole, RoasterRole, RetailerRole,
   // Define enum 'State' with the following values:
   enum State 
   { 
-    Harvested,  // 0
-    Processed,  // 1
-    Packed,     // 2
-    ForSale,    // 3
-    Sold,       // 4
-    Shipped,    // 5
-    Received,   // 6
-    Purchased   // 7
+    Harvested,    // 0
+    Hulled,       // 1
+    Dried,        // 2
+    CropPacked,   // 3
+    CropForSale,  // 4
+    InterForSale, // 5
+    Roasted,      // 6
+    RoastPacked,  // 7
+    RoastForSale, // 8
+    ForSale,      // 9
+    Purchased     // 10
     }
 
   State constant defaultState = State.Harvested;
@@ -152,12 +151,10 @@ contract SupplyChain is GrowerRole, IntermediaryRole, RoasterRole, RetailerRole,
     upc = 1;
   }
 
-  // // Define a function 'kill' if required
-  // function kill() public {
-  //   if (msg.sender == owner) {
-  //     selfdestruct(owner);
-  //   }
-  // }
+  // Define a function 'kill' if required
+  function kill() public onlyOwner {
+      selfdestruct(msg.sender);
+  }
 
   // Define a function 'harvestItem' that allows a farmer to mark an item 'Harvested'
   function harvestItem(uint _upc, address _originFarmerID, string _originFarmName, string _originFarmInformation, string  _originFarmLatitude, string  _originFarmLongitude, string  _productNotes) public 

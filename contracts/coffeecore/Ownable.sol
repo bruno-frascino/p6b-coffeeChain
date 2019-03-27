@@ -1,9 +1,15 @@
 pragma solidity ^0.4.24;
 
-import "../coffeebase/SupplyChain.sol";
+import "../coffeeaccesscontrol/GrowerRole.sol";
+import "../coffeeaccesscontrol/IntermediaryRole.sol";
+import "../coffeeaccesscontrol/RoasterRole.sol";
+import "../coffeeaccesscontrol/RetailerRole.sol";
+import "../coffeeaccesscontrol/ConsumerRole.sol";
+
 
 /// Provides basic authorization control
-contract Ownable is SupplyChain {
+contract Ownable is GrowerRole, IntermediaryRole, RoasterRole, RetailerRole, ConsumerRole {
+    
     address private origOwner;
 
     // Define an Event

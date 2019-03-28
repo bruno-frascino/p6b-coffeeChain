@@ -176,14 +176,31 @@ contract SupplyChain is Ownable {
   }
 
   // Define a function 'harvestItem' that allows a grower to mark an item 'Harvested'
-  function harvestItem(uint _upc, address _originGrowerID, string _originGrowerName, string _originGrowerInformation, string  _originGrowerLatitude, string  _originGrowerLongitude, string  _productNotes) public 
+  function harvestItem(uint _upc, address _originGrowerID, string _originGrowerName, 
+    string _originGrowerInformation, string  _originGrowerLatitude, string  _originGrowerLongitude, 
+    string  _productNotes) public 
   {
-    // Add the new item as part of Harvest
     
+    Item memory harvestedOne;
+    
+    harvestedOne.upc = _upc;
+    harvestedOne.sku = sku;
+    harvestedOne.originGrowerID = _originGrowerID;
+    harvestedOne.originGrowerName = _originGrowerName;
+    harvestedOne.originGrowerInformation = _originGrowerInformation;
+    harvestedOne.originGrowerLatitude = _originGrowerLatitude;
+    harvestedOne.originGrowerLongitude = _originGrowerLongitude;
+    harvestedOne.productNotes = _productNotes;
+    harvestedOne.itemState = State.Harvested;
+    harvestedOne.ownerID = _originGrowerID;
+    
+    items[_upc] = harvestedOne;
+
     // Increment sku
     sku = sku + 1;
-    // Emit the appropriate event
     
+    // Emit the appropriate event
+    emit Harvested(_upc); 
   }
 
   // Define a function 'processtItem' that allows a grower to mark an item 'Processed'
@@ -299,14 +316,14 @@ contract SupplyChain is Ownable {
   ) 
   {
   // Assign values to the 8 parameters
-  itemSKU = items[upc].sku;
-  itemUPC = items[upc].upc;
-  ownerID = items[upc].ownerID;
-  originGrowerID = items[upc].originGrowerID;
-  originGrowerName = items[upc].originGrowerName;
-  originGrowerInformation = items[upc].originGrowerInformation;
-  originGrowerLatitude = items[upc].originGrowerLatitude;
-  originGrowerLongitude = items[upc].originGrowerLongitude;
+  itemSKU = items[_upc].sku;
+  itemUPC = items[_upc].upc;
+  ownerID = items[_upc].ownerID;
+  originGrowerID = items[_upc].originGrowerID;
+  originGrowerName = items[_upc].originGrowerName;
+  originGrowerInformation = items[_upc].originGrowerInformation;
+  originGrowerLatitude = items[_upc].originGrowerLatitude;
+  originGrowerLongitude = items[_upc].originGrowerLongitude;
 
   return 
   (
@@ -337,16 +354,16 @@ contract SupplyChain is Ownable {
   ) 
   {
     // Assign values to the 10 parameters
-    itemSKU = items[upc].sku;
-    itemUPC = items[upc].upc;
-    productID = items[upc].productID;
-    productNotes = items[upc].productNotes;
-    productPrice = items[upc].productPrice;
-    itemState = items[upc].itemState;
-    intermediaryID = items[upc].intermediaryID;
-    roasterID = items[upc].roasterID;
-    retailerID = items[upc].retailerID;
-    consumerID = items[upc].consumerID;
+    itemSKU = items[_upc].sku;
+    itemUPC = items[_upc].upc;
+    productID = items[_upc].productID;
+    productNotes = items[_upc].productNotes;
+    productPrice = items[_upc].productPrice;
+    itemState = items[_upc].itemState;
+    intermediaryID = items[_upc].intermediaryID;
+    roasterID = items[_upc].roasterID;
+    retailerID = items[_upc].retailerID;
+    consumerID = items[_upc].consumerID;
     
   return 
   (

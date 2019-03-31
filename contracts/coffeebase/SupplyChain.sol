@@ -315,7 +315,7 @@ contract SupplyChain is Ownable {
     items[_upc].productPrice = _price;
     items[_upc].itemState = State.InterForSale;
     // Emit the appropriate event
-    emit InterForSale(upc);
+    emit InterForSale(_upc);
   }
 
   // Define a function 'buyItem' that allows the Intermediary to mark an item 'InterSold'
@@ -365,9 +365,44 @@ contract SupplyChain is Ownable {
     items[_upc].itemState = State.RoastPacked;
     
     // Emit the appropriate event
-    emit RoastPacked(upc)
+    emit RoastPacked(_upc);
   }
 
+  // Define a function 'sellCropItem' that allows a grower to mark an item 'CropForSale'
+  function sellRoastItem(uint _upc, uint _price) roastPacked(_upc) onlyRoaster() public 
+  // Call modifier to check if upc has passed previous supply chain stage
+  
+  // Call modifier to verify caller of this function
+  
+  {
+    // Update the appropriate fields
+    items[_upc].productPrice = _price;
+    items[_upc].itemState = State.RoastForSale;
+    // Emit the appropriate event
+    emit RoastForSale(_upc);
+  }
+
+  // Define a function 'buyItem' that allows the Intermediary to mark an item 'InterSold'
+  // Use the above defined modifiers to check if the item is available for sale, if the buyer has paid enough, 
+  // and any excess ether sent is refunded back to the buyer
+  function buyRoastItem(uint _upc) roastForSale(_upc) onlyRetailer() paidEnough(_upc) checkValue(_upc) public 
+    
+    // Call modifer to check if buyer has paid enough
+    
+    // Call modifer to send any excess ether back to buyer
+    
+    {
+    
+    // Update the appropriate fields - ownerID, intermediaryID, itemState
+    items[_upc].ownerID = msg.sender;
+    items[_upc].retailerID = msg.sender;
+    items[_upc].itemState = State.RetailerItem;
+
+    // Transfer money to intermediary
+    items[_upc].roasterID.transfer(items[_upc].productPrice);
+    // emit the appropriate event
+    emit RetailerItem(_upc);
+  }
   
   // Define a function 'purchaseItem' that allows the consumer to mark an item 'Purchased'
   // Use the above modifiers to check if the item is received

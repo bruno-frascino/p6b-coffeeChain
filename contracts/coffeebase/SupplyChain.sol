@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+  pragma solidity ^0.4.24;
 
 import "../coffeecore/Ownable.sol";
 
@@ -65,6 +65,7 @@ contract SupplyChain is Ownable {
   event Dried(uint upc);
   event CropPacked(uint upc);
   event CropForSale(uint upc);
+  event InterForSale(uint upc);
   event Packed(uint upc);
   event ForSale(uint upc);
   event Sold(uint upc);
@@ -85,7 +86,8 @@ contract SupplyChain is Ownable {
   }
 
   // Define a modifier that checks if the paid amount is sufficient to cover the price
-  modifier paidEnough(uint _price) { 
+  modifier paidEnough(uint _upc) { 
+    uint _price = items[_upc].productPrice;
     require(msg.value >= _price); 
     _;
   }
@@ -95,7 +97,8 @@ contract SupplyChain is Ownable {
     _;
     uint _price = items[_upc].productPrice;
     uint amountToReturn = msg.value - _price;
-    items[_upc].consumerID.transfer(amountToReturn);
+    //items[_upc].consumerID.transfer(amountToReturn);
+    msg.sender.transfer(amountToReturn);
   }
 
   // Define a modifier that checks if an item.state of a upc is Harvested
@@ -261,11 +264,10 @@ contract SupplyChain is Ownable {
     emit CropForSale(_upc);
   }
 
-  // Define a function 'buyItem' that allows the disributor to mark an item 'Sold'
+  // Define a function 'buyItem' that allows the Intermediary to mark an item 'InterSold'
   // Use the above defined modifiers to check if the item is available for sale, if the buyer has paid enough, 
   // and any excess ether sent is refunded back to the buyer
-  function buyItem(uint _upc) public payable 
-    // Call modifier to check if upc has passed previous supply chain stage
+  function buyCropItem(uint _upc) cropForSale(_upc) onlyIntermediary() paidEnough(_upc) checkValue(_upc) public 
     
     // Call modifer to check if buyer has paid enough
     
@@ -273,12 +275,15 @@ contract SupplyChain is Ownable {
     
     {
     
-    // Update the appropriate fields - ownerID, distributorID, itemState
-    
+    // Update the appropriate fields - ownerID, intermediaryID, itemState
+    items[_upc].ownerID = msg.sender;
+    items[_upc].intermediaryID = msg.sender;
+    items[_upc].itemState = State.InterForSale;
+
     // Transfer money to grower
-    
+    items[_upc].originGrowerID.transfer(items[_upc].productPrice);
     // emit the appropriate event
-    
+    emit InterForSale(_upc);
   }
 
   // Define a function 'shipItem' that allows the distributor to mark an item 'Shipped'

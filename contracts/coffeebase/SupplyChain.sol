@@ -340,6 +340,34 @@ contract SupplyChain is Ownable {
     emit RoastItem(_upc);
   }
 
+  // Define a function 'dryItem' that allows a grower to mark an item 'Dried'
+  function roast(uint _upc) public roastItem(_upc) onlyRoaster()
+  // Call modifier to check if upc has passed previous supply chain stage
+  
+  // Call modifier to verify caller of this function
+  
+  {
+    // Update the appropriate fields
+    items[_upc].itemState = State.Roasted;
+    
+    // Emit the appropriate event
+    emit Roasted(_upc);
+  }
+
+  // Define a function 'dryItem' that allows a grower to mark an item 'Dried'
+  function roastPack(uint _upc) public roasted(_upc) onlyRoaster()
+  // Call modifier to check if upc has passed previous supply chain stage
+  
+  // Call modifier to verify caller of this function
+  
+  {
+    // Update the appropriate fields
+    items[_upc].itemState = State.RoastPacked;
+    
+    // Emit the appropriate event
+    emit RoastPacked(upc)
+  }
+
   
   // Define a function 'purchaseItem' that allows the consumer to mark an item 'Purchased'
   // Use the above modifiers to check if the item is received

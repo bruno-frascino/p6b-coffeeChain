@@ -63,6 +63,7 @@ contract SupplyChain is Ownable {
   event Harvested(uint upc);
   event Hulled(uint upc);
   event Dried(uint upc);
+  event CropPacked(uint upc);
   event Packed(uint upc);
   event ForSale(uint upc);
   event Sold(uint upc);
@@ -230,6 +231,20 @@ contract SupplyChain is Ownable {
     
     // Emit the appropriate event
     emit Dried(_upc);
+  }
+
+  // Define a function 'cropPackItem' that allows a grower to mark an item 'CropPacked'
+  function cropPackItem(uint _upc) public dried(_upc) onlyGrower()
+  // Call modifier to check if upc has passed previous supply chain stage
+  
+  // Call modifier to verify caller of this function
+  
+  {
+    // Update the appropriate fields
+    items[_upc].itemState = State.CropPacked;
+    
+    // Emit the appropriate event
+    emit CropPacked(_upc);
   }
 
   // Define a function 'sellItem' that allows a grower to mark an item 'ForSale'

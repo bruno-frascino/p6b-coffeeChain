@@ -31,6 +31,7 @@ contract SupplyChain is Ownable {
     CropForSale,  // 4
     InterItem,    // 5
     InterForSale, // 6
+    RoastItem,
     Roasted,      // 7
     RoastPacked,  // 8
     RoastForSale, // 9
@@ -69,6 +70,7 @@ contract SupplyChain is Ownable {
   event CropForSale(uint upc);
   event InterItem(uint upc);
   event InterForSale(uint upc);
+  event RoastItem(uint upc);
   event Roasted(uint upc);
   event RoastPacked(uint upc);
   event RoastForSale(uint upc);
@@ -143,6 +145,12 @@ contract SupplyChain is Ownable {
   // Define a modifier that checks if an item.state of a upc is InterForSale
   modifier interForSale(uint _upc) {
     require(items[_upc].itemState == State.InterForSale);
+    _;
+  }
+
+    // Define a modifier that checks if an item.state of a upc is InterForSale
+  modifier roastItem(uint _upc) {
+    require(items[_upc].itemState == State.RoastItem);
     _;
   }
 
@@ -323,42 +331,16 @@ contract SupplyChain is Ownable {
     
     // Update the appropriate fields - ownerID, intermediaryID, itemState
     items[_upc].ownerID = msg.sender;
-    items[_upc].intermediaryID = msg.sender;
-    items[_upc].itemState = State.InterForSale;
+    items[_upc].roasterID = msg.sender;
+    items[_upc].itemState = State.RoastItem;
 
-    // Transfer money to grower
-    items[_upc].originGrowerID.transfer(items[_upc].productPrice);
+    // Transfer money to intermediary
+    items[_upc].intermediaryID.transfer(items[_upc].productPrice);
     // emit the appropriate event
-    emit InterForSale(_upc);
+    emit RoastItem(_upc);
   }
 
-  // Define a function 'shipItem' that allows the distributor to mark an item 'Shipped'
-  // Use the above modifers to check if the item is sold
-  function shipItem(uint _upc) public 
-    // Call modifier to check if upc has passed previous supply chain stage
-    
-    // Call modifier to verify caller of this function
-    
-    {
-    // Update the appropriate fields
-    
-    // Emit the appropriate event
-    
-  }
-
-  // Define a function 'receiveItem' that allows the retailer to mark an item 'Received'
-  // Use the above modifiers to check if the item is shipped
-  function receiveItem(uint _upc) public 
-    // Call modifier to check if upc has passed previous supply chain stage
-    
-    // Access Control List enforced by calling Smart Contract / DApp
-    {
-    // Update the appropriate fields - ownerID, retailerID, itemState
-    
-    // Emit the appropriate event
-    
-  }
-
+  
   // Define a function 'purchaseItem' that allows the consumer to mark an item 'Purchased'
   // Use the above modifiers to check if the item is received
   function purchaseItem(uint _upc) public 

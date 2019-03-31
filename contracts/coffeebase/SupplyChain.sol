@@ -148,7 +148,7 @@ contract SupplyChain is Ownable {
     _;
   }
 
-    // Define a modifier that checks if an item.state of a upc is InterForSale
+  // Define a modifier that checks if an item.state of a upc is InterForSale
   modifier roastItem(uint _upc) {
     require(items[_upc].itemState == State.RoastItem);
     _;
@@ -169,6 +169,12 @@ contract SupplyChain is Ownable {
   // Define a modifier that checks if an item.state of a upc is RoastForSale
   modifier roastForSale(uint _upc) {
     require(items[_upc].itemState == State.RoastForSale);
+    _;
+  }
+
+  // Define a modifier that checks if an item.state of a upc is InterForSale
+  modifier retailerItem(uint _upc) {
+    require(items[_upc].itemState == State.RetailerItem);
     _;
   }
 
@@ -403,18 +409,34 @@ contract SupplyChain is Ownable {
     // emit the appropriate event
     emit RetailerItem(_upc);
   }
+
+  // Define a function 'sellCropItem' that allows a grower to mark an item 'CropForSale'
+  function sellItem(uint _upc, uint _price) retailerItem(_upc) onlyRetailer() public 
+  // Call modifier to check if upc has passed previous supply chain stage
+  
+  // Call modifier to verify caller of this function
+  
+  {
+    // Update the appropriate fields
+    items[_upc].productPrice = _price;
+    items[_upc].itemState = State.ForSale;
+    // Emit the appropriate event
+    emit ForSale(_upc);
+  }
   
   // Define a function 'purchaseItem' that allows the consumer to mark an item 'Purchased'
   // Use the above modifiers to check if the item is received
-  function purchaseItem(uint _upc) public 
+  function purchaseItem(uint _upc) forSale(_upc) onlyConsumer() paidEnough(_upc) checkValue(_upc) public 
     // Call modifier to check if upc has passed previous supply chain stage
     
     // Access Control List enforced by calling Smart Contract / DApp
     {
     // Update the appropriate fields - ownerID, consumerID, itemState
-    
+    items[_upc].ownerID = msg.sender;
+    items[_upc].consumerID = msg.sender;
+    items[_upc].itemState = State.Purchased;    
     // Emit the appropriate event
-    
+    emit Purchased(_upc);
   }
 
   // Define a function 'fetchItemBufferOne' that fetches the data

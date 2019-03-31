@@ -29,12 +29,14 @@ contract SupplyChain is Ownable {
     Dried,        // 2
     CropPacked,   // 3
     CropForSale,  // 4
-    InterForSale, // 5
-    Roasted,      // 6
-    RoastPacked,  // 7
-    RoastForSale, // 8
-    ForSale,      // 9
-    Purchased     // 10
+    InterItem,    // 5
+    InterForSale, // 6
+    Roasted,      // 7
+    RoastPacked,  // 8
+    RoastForSale, // 9
+    RetailerItem, // 10
+    ForSale,      // 11
+    Purchased     // 12
     }
 
   State constant defaultState = State.Harvested;
@@ -59,18 +61,19 @@ contract SupplyChain is Ownable {
     address consumerID; // Metamask-Ethereum address of the Consumer
   }
 
-  // Define 8 events with the same 8 state values and accept 'upc' as input argument
+  // Define 13 events with the same 8 state values and accept 'upc' as input argument
   event Harvested(uint upc);
   event Hulled(uint upc);
   event Dried(uint upc);
   event CropPacked(uint upc);
   event CropForSale(uint upc);
+  event InterItem(uint upc);
   event InterForSale(uint upc);
-  event Packed(uint upc);
+  event Roasted(uint upc);
+  event RoastPacked(uint upc);
+  event RoastForSale(uint upc);
+  event RetailerItem(uint upc);
   event ForSale(uint upc);
-  event Sold(uint upc);
-  event Shipped(uint upc);
-  event Received(uint upc);
   event Purchased(uint upc);
 
   // Define a modifer that checks to see if msg.sender == owner of the contract
@@ -131,6 +134,12 @@ contract SupplyChain is Ownable {
     _;
   }
   
+  // Define a modifier that checks if an item.state of a upc is InterForSale
+  modifier interItem(uint _upc) {
+    require(items[_upc].itemState == State.InterItem);
+    _;
+  }
+
   // Define a modifier that checks if an item.state of a upc is InterForSale
   modifier interForSale(uint _upc) {
     require(items[_upc].itemState == State.InterForSale);
@@ -259,6 +268,7 @@ contract SupplyChain is Ownable {
   
   {
     // Update the appropriate fields
+    items[_upc].productPrice = _price;
     items[_upc].itemState = State.CropForSale;
     // Emit the appropriate event
     emit CropForSale(_upc);
@@ -268,6 +278,42 @@ contract SupplyChain is Ownable {
   // Use the above defined modifiers to check if the item is available for sale, if the buyer has paid enough, 
   // and any excess ether sent is refunded back to the buyer
   function buyCropItem(uint _upc) cropForSale(_upc) onlyIntermediary() paidEnough(_upc) checkValue(_upc) public 
+    
+    // Call modifer to check if buyer has paid enough
+    
+    // Call modifer to send any excess ether back to buyer
+    
+    {
+    
+    // Update the appropriate fields - ownerID, intermediaryID, itemState
+    items[_upc].ownerID = msg.sender;
+    items[_upc].intermediaryID = msg.sender;
+    items[_upc].itemState = State.InterForSale;
+
+    // Transfer money to grower
+    items[_upc].originGrowerID.transfer(items[_upc].productPrice);
+    // emit the appropriate event
+    emit InterItem(_upc);
+  }
+
+  // Define a function 'sellCropItem' that allows a grower to mark an item 'CropForSale'
+  function sellInterItem(uint _upc, uint _price) interItem(_upc) onlyIntermediary() public 
+  // Call modifier to check if upc has passed previous supply chain stage
+  
+  // Call modifier to verify caller of this function
+  
+  {
+    // Update the appropriate fields
+    items[_upc].productPrice = _price;
+    items[_upc].itemState = State.InterForSale;
+    // Emit the appropriate event
+    emit InterForSale(upc);
+  }
+
+  // Define a function 'buyItem' that allows the Intermediary to mark an item 'InterSold'
+  // Use the above defined modifiers to check if the item is available for sale, if the buyer has paid enough, 
+  // and any excess ether sent is refunded back to the buyer
+  function buyInterItem(uint _upc) interForSale(_upc) onlyRoaster() paidEnough(_upc) checkValue(_upc) public 
     
     // Call modifer to check if buyer has paid enough
     

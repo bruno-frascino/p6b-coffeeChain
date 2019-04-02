@@ -31,13 +31,13 @@ contract SupplyChain is Ownable {
     CropForSale,  // 4
     InterItem,    // 5
     InterForSale, // 6
-    RoastItem,
-    Roasted,      // 7
-    RoastPacked,  // 8
-    RoastForSale, // 9
-    RetailerItem, // 10
-    ForSale,      // 11
-    Purchased     // 12
+    RoastItem,    // 7
+    Roasted,      // 8
+    RoastPacked,  // 9
+    RoastForSale, // 10
+    RetailerItem, // 11
+    ForSale,      // 12
+    Purchased     // 13
     }
 
   State constant defaultState = State.Harvested;
@@ -62,7 +62,7 @@ contract SupplyChain is Ownable {
     address consumerID; // Metamask-Ethereum address of the Consumer
   }
 
-  // Define 13 events with the same 8 state values and accept 'upc' as input argument
+  // Define 13 events with the same 13 state values and accept 'upc' as input argument
   event Harvested(uint upc);
   event Hulled(uint upc);
   event Dried(uint upc);
@@ -136,7 +136,7 @@ contract SupplyChain is Ownable {
     _;
   }
   
-  // Define a modifier that checks if an item.state of a upc is InterForSale
+  // Define a modifier that checks if an item.state of a upc is InterItem
   modifier interItem(uint _upc) {
     require(items[_upc].itemState == State.InterItem);
     _;
@@ -148,7 +148,7 @@ contract SupplyChain is Ownable {
     _;
   }
 
-  // Define a modifier that checks if an item.state of a upc is InterForSale
+  // Define a modifier that checks if an item.state of a upc is RoastItem
   modifier roastItem(uint _upc) {
     require(items[_upc].itemState == State.RoastItem);
     _;
@@ -172,7 +172,7 @@ contract SupplyChain is Ownable {
     _;
   }
 
-  // Define a modifier that checks if an item.state of a upc is InterForSale
+  // Define a modifier that checks if an item.state of a upc is RetailerItem
   modifier retailerItem(uint _upc) {
     require(items[_upc].itemState == State.RetailerItem);
     _;
@@ -288,7 +288,7 @@ contract SupplyChain is Ownable {
     emit CropForSale(_upc);
   }
 
-  // Define a function 'buyItem' that allows the Intermediary to mark an item 'InterSold'
+  // Define a function 'buyCropItem' that allows the Intermediary to mark an item 'InterItem'
   // Use the above defined modifiers to check if the item is available for sale, if the buyer has paid enough, 
   // and any excess ether sent is refunded back to the buyer
   function buyCropItem(uint _upc) cropForSale(_upc) onlyIntermediary() paidEnough(_upc) checkValue(_upc) public 
@@ -310,7 +310,7 @@ contract SupplyChain is Ownable {
     emit InterItem(_upc);
   }
 
-  // Define a function 'sellCropItem' that allows a grower to mark an item 'CropForSale'
+  // Define a function 'sellInterItem' that allows a grower to mark an item 'InterForSale'
   function sellInterItem(uint _upc, uint _price) interItem(_upc) onlyIntermediary() public 
   // Call modifier to check if upc has passed previous supply chain stage
   
@@ -324,7 +324,7 @@ contract SupplyChain is Ownable {
     emit InterForSale(_upc);
   }
 
-  // Define a function 'buyItem' that allows the Intermediary to mark an item 'InterSold'
+  // Define a function 'buyInterItem' that allows the Intermediary to mark an item 'RoastItem'
   // Use the above defined modifiers to check if the item is available for sale, if the buyer has paid enough, 
   // and any excess ether sent is refunded back to the buyer
   function buyInterItem(uint _upc) interForSale(_upc) onlyRoaster() paidEnough(_upc) checkValue(_upc) public 
@@ -346,7 +346,7 @@ contract SupplyChain is Ownable {
     emit RoastItem(_upc);
   }
 
-  // Define a function 'dryItem' that allows a grower to mark an item 'Dried'
+  // Define a function 'roast' that allows a Roaster to mark an item 'Roasted'
   function roast(uint _upc) public roastItem(_upc) onlyRoaster()
   // Call modifier to check if upc has passed previous supply chain stage
   
@@ -360,7 +360,7 @@ contract SupplyChain is Ownable {
     emit Roasted(_upc);
   }
 
-  // Define a function 'dryItem' that allows a grower to mark an item 'Dried'
+  // Define a function 'roastPack' that allows a roaster to mark an item 'RoastPacked'
   function roastPack(uint _upc) public roasted(_upc) onlyRoaster()
   // Call modifier to check if upc has passed previous supply chain stage
   
@@ -374,7 +374,7 @@ contract SupplyChain is Ownable {
     emit RoastPacked(_upc);
   }
 
-  // Define a function 'sellCropItem' that allows a grower to mark an item 'CropForSale'
+  // Define a function 'sellRoastItem' that allows a roaster to mark an item 'RoastForSale'
   function sellRoastItem(uint _upc, uint _price) roastPacked(_upc) onlyRoaster() public 
   // Call modifier to check if upc has passed previous supply chain stage
   
@@ -388,7 +388,7 @@ contract SupplyChain is Ownable {
     emit RoastForSale(_upc);
   }
 
-  // Define a function 'buyItem' that allows the Intermediary to mark an item 'InterSold'
+  // Define a function 'buyRoastItem' that allows the Retailer to mark an item 'RetailerItem'
   // Use the above defined modifiers to check if the item is available for sale, if the buyer has paid enough, 
   // and any excess ether sent is refunded back to the buyer
   function buyRoastItem(uint _upc) roastForSale(_upc) onlyRetailer() paidEnough(_upc) checkValue(_upc) public 
@@ -410,7 +410,7 @@ contract SupplyChain is Ownable {
     emit RetailerItem(_upc);
   }
 
-  // Define a function 'sellCropItem' that allows a grower to mark an item 'CropForSale'
+  // Define a function 'sellItem' that allows a retailer to mark an item 'ForSale'
   function sellItem(uint _upc, uint _price) retailerItem(_upc) onlyRetailer() public 
   // Call modifier to check if upc has passed previous supply chain stage
   

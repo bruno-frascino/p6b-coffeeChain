@@ -291,7 +291,7 @@ contract SupplyChain is Ownable {
   // Define a function 'buyCropItem' that allows the Intermediary to mark an item 'InterItem'
   // Use the above defined modifiers to check if the item is available for sale, if the buyer has paid enough, 
   // and any excess ether sent is refunded back to the buyer
-  function buyCropItem(uint _upc) cropForSale(_upc) onlyIntermediary() paidEnough(_upc) checkValue(_upc) public 
+  function buyCropItem(uint _upc) cropForSale(_upc) onlyIntermediary() paidEnough(_upc) checkValue(_upc) payable public 
     
     // Call modifer to check if buyer has paid enough
     
@@ -302,7 +302,7 @@ contract SupplyChain is Ownable {
     // Update the appropriate fields - ownerID, intermediaryID, itemState
     items[_upc].ownerID = msg.sender;
     items[_upc].intermediaryID = msg.sender;
-    items[_upc].itemState = State.InterForSale;
+    items[_upc].itemState = State.InterItem;
 
     // Transfer money to grower
     items[_upc].originGrowerID.transfer(items[_upc].productPrice);
@@ -327,7 +327,7 @@ contract SupplyChain is Ownable {
   // Define a function 'buyInterItem' that allows the Intermediary to mark an item 'RoastItem'
   // Use the above defined modifiers to check if the item is available for sale, if the buyer has paid enough, 
   // and any excess ether sent is refunded back to the buyer
-  function buyInterItem(uint _upc) interForSale(_upc) onlyRoaster() paidEnough(_upc) checkValue(_upc) public 
+  function buyInterItem(uint _upc) interForSale(_upc) onlyRoaster() paidEnough(_upc) checkValue(_upc) payable public 
     
     // Call modifer to check if buyer has paid enough
     
@@ -391,7 +391,7 @@ contract SupplyChain is Ownable {
   // Define a function 'buyRoastItem' that allows the Retailer to mark an item 'RetailerItem'
   // Use the above defined modifiers to check if the item is available for sale, if the buyer has paid enough, 
   // and any excess ether sent is refunded back to the buyer
-  function buyRoastItem(uint _upc) roastForSale(_upc) onlyRetailer() paidEnough(_upc) checkValue(_upc) public 
+  function buyRoastItem(uint _upc) roastForSale(_upc) onlyRetailer() paidEnough(_upc) checkValue(_upc) payable public 
     
     // Call modifer to check if buyer has paid enough
     
@@ -426,7 +426,7 @@ contract SupplyChain is Ownable {
   
   // Define a function 'purchaseItem' that allows the consumer to mark an item 'Purchased'
   // Use the above modifiers to check if the item is received
-  function purchaseItem(uint _upc) forSale(_upc) onlyConsumer() paidEnough(_upc) checkValue(_upc) public 
+  function purchaseItem(uint _upc) forSale(_upc) onlyConsumer() paidEnough(_upc) checkValue(_upc) payable public 
     // Call modifier to check if upc has passed previous supply chain stage
     
     // Access Control List enforced by calling Smart Contract / DApp

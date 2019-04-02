@@ -206,7 +206,7 @@ App = {
         });
     },
 
-    processItem: function (event) {
+    hullItem: function (event) {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
 

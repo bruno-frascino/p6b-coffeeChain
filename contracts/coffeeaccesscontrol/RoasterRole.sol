@@ -31,7 +31,7 @@ contract RoasterRole {
   }
 
   // Define a function 'addRoaster' that adds this role
-  function addRoaster(address account) public onlyRoaster {
+  function addRoaster(address account) public {
     _addRoaster(account);
   }
 

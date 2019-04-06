@@ -21,7 +21,7 @@ contract IntermediaryRole{
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyIntermediary() {
-    require(isIntermediary(msg.sender));
+    require(isIntermediary(msg.sender), 'Account is not an Intermediary');
     _;
   }
 
@@ -31,7 +31,7 @@ contract IntermediaryRole{
   }
 
 // Define a function 'addIntermediary' that adds this role
-  function addIntermediary(address account) public onlyIntermediary {
+  function addIntermediary(address account) public {
     _addIntermediary(account);
   }
 

@@ -210,47 +210,6 @@ contract('SupplyChain', function(accounts) {
 
     })    
     
-//        try{
-        // Mark an item as CropForSale by calling function sellCropItem()
-        // await supplyChain.buyCropItem(upc, {value: walletValue, from: accounts[2]});
-
-        // await supplyChain.buyCropItem(upc);
-
-        // //assert.fail("expected throw not received") 
-        // }
-        // catch(err){
-        //     let notForSaleError = false;
-        //     let InsufficientError = false;
-
-        //     if(err.message.includes("Insufficient Payment") ){  
-        //         InsufficientError = true;
-        //     }
-
-        //     // the error should be because of an invalid distributor account
-        //     if(err.message.includes("Crop is not for sale") ){  
-        //         notForSaleError = true;
-        //     }
-            
-        
-        //     // will only be equal when the expected error is received
-        //     assert.equal(notForSaleError, false, "Not For Sale");  
-        //     assert.equal(InsufficientError, false, "No Funds");  
-        // }
-
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        //resultBufferTwo = await supplyChain.fetchItemBufferTwo.call(upc)
-
-        // Verify the result set
-        //assert.equal(resultBufferTwo[5], 5, 'Error: Invalid item State')
-        //assert.equal(eventAddEmitted, true, 'Invalid event emitted')        
-//        assert.equal(eventInterEmitted, true, 'Invalid event emitted')  
-
-
-    //     const walletValue = web3.toWei(3, "ether");
-    //     await supplyChain.buyTeste(upc, {value: walletValue});
-    //     assert.equal(eventEmitted, true, 'Invalid ---- emitted')        
-  
-    // })    
 
     // 7 Test
     it("Testing smart contract function sellInterItem() that allows a intermediary to sell coffee", async() => {

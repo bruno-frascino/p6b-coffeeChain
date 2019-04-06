@@ -93,7 +93,7 @@ contract SupplyChain is Ownable {
   // Define a modifier that checks if the paid amount is sufficient to cover the price
   modifier paidEnough(uint _upc) { 
     uint _price = items[_upc].productPrice;
-    require(msg.value >= _price); 
+    require(msg.value >= _price, 'Insufficient Payment'); 
     _;
   }
   
@@ -132,7 +132,7 @@ contract SupplyChain is Ownable {
 
   // Define a modifier that checks if an item.state of a upc is CropForSale
   modifier cropForSale(uint _upc) {
-    require(items[_upc].itemState == State.CropForSale);
+    require(items[_upc].itemState == State.CropForSale, 'Crop is not for sale');
     _;
   }
   
@@ -214,6 +214,7 @@ contract SupplyChain is Ownable {
     
     harvestedOne.upc = _upc;
     harvestedOne.sku = sku;
+    harvestedOne.productID = sku + _upc;
     harvestedOne.originGrowerID = _originGrowerID;
     harvestedOne.originGrowerName = _originGrowerName;
     harvestedOne.originGrowerInformation = _originGrowerInformation;
@@ -291,13 +292,12 @@ contract SupplyChain is Ownable {
   // Define a function 'buyCropItem' that allows the Intermediary to mark an item 'InterItem'
   // Use the above defined modifiers to check if the item is available for sale, if the buyer has paid enough, 
   // and any excess ether sent is refunded back to the buyer
-  function buyCropItem(uint _upc) cropForSale(_upc) onlyIntermediary() paidEnough(_upc) checkValue(_upc) payable public 
+  function buyCropItem(uint _upc) onlyIntermediary() paidEnough(_upc) checkValue(_upc) payable public 
     
-    // Call modifer to check if buyer has paid enough
+    //Call modifer to check if buyer has paid enough
     
-    // Call modifer to send any excess ether back to buyer
-    
-    {
+   // Call modifer to send any excess ether back to buyer
+   {
     
     // Update the appropriate fields - ownerID, intermediaryID, itemState
     items[_upc].ownerID = msg.sender;
@@ -306,9 +306,11 @@ contract SupplyChain is Ownable {
 
     // Transfer money to grower
     items[_upc].originGrowerID.transfer(items[_upc].productPrice);
-    // emit the appropriate event
+    //emit the appropriate event
     emit InterItem(_upc);
+
   }
+
 
   // Define a function 'sellInterItem' that allows a grower to mark an item 'InterForSale'
   function sellInterItem(uint _upc, uint _price) interItem(_upc) onlyIntermediary() public 

@@ -4,7 +4,7 @@ App = {
     emptyAddress: "0x0000000000000000000000000000000000000000",
     sku: 0,
     upc: 0,
-    metamaskAccountID: "0x0000000000000000000000000000000000000000",
+    metamaskAccountID: "0x0000000000000000000000000000000000000000", //"0x07ECf338213BF5d4AC09818Fa34C291BCe63f334",
     ownerID: "0x0000000000000000000000000000000000000000",
     originGrowerID: "0x0000000000000000000000000000000000000000",
     originGrowerName: null,
@@ -94,17 +94,16 @@ App = {
                 console.log('Error:',err);
                 return;
             }
-            console.log('getMetaskID:',res);
             App.metamaskAccountID = res[0];
-
+            console.log('getMetaskAccountID:',res[0]);
         })
     },
 
     initSupplyChain: function () {
-        /// Source the truffle compiled smart contracts
+        // Source the truffle compiled smart contracts
         var jsonSupplyChain='../../build/contracts/SupplyChain.json';
         
-        /// JSONfy the smart contracts
+        // JSONfy the smart contracts
         $.getJSON(jsonSupplyChain, function(data) {
             console.log('data',data);
             var SupplyChainArtifact = data;
@@ -188,6 +187,8 @@ App = {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
 
+        App.readForm();
+
         App.contracts.SupplyChain.deployed().then(function(instance) {
             return instance.harvestItem(
                 App.upc, 
@@ -201,6 +202,10 @@ App = {
         }).then(function(result) {
             $("#ftc-item").text(result);
             console.log('harvestItem',result);
+
+            App.originGrowerID = App.metamaskAccountID;
+            $("#originGrowerID").val(App.originGrowerID);
+
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -310,7 +315,7 @@ App = {
         });
     },
 
-    roastItem: function (event) {
+    roast: function (event) {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
 
@@ -413,6 +418,20 @@ App = {
         }).then(function(result) {
           $("#ftc-item").text(result);
           console.log('fetchItemBufferOne', result);
+        
+          //ownerID
+          $("#ownerID").val(result[2]);
+          //originGrowerID
+          $("#originGrowerID").val(result[3]);
+          //originGrowerName
+          $("#originGrowerName").val(result[4]);
+          //originGrowerInformation
+          $("#originGrowerInformation").val(result[5]);
+          //originGrowerLatitude
+          $("#originGrowerLatitude").val(result[6]);
+          //originGrowerLongitude
+          $("#originGrowerLongitude").val(result[7]);
+
         }).catch(function(err) {
           console.log(err.message);
         });
@@ -427,6 +446,27 @@ App = {
         }).then(function(result) {
           $("#ftc-item").text(result);
           console.log('fetchItemBufferTwo', result);
+
+          //productID
+          //$("#productID").val(result[2]);
+          console.log('Product Id: ' + result[2]);
+          //productNotes
+          $("#productNotes").val(result[3]);
+          //productPrice
+          $("#productPrice").val(result[4]);
+          //itemState
+          //$("#itemState").val(result[5]);
+          console.log('Item state: ' + result[5]);
+          //intermediaryID
+          $("#intermediaryID").val(result[6]);
+          //roasterID
+          $("#roasterID").val(result[7]);
+          //retailerID
+          $("#retailerID").val(result[8]);
+          //consumerID
+          $("#consumerID").val(result[9]);
+        
+
         }).catch(function(err) {
           console.log(err.message);
         });

@@ -43,6 +43,22 @@ contract('SupplyChain', function(accounts) {
     console.log("Retailer: accounts[4] ", accounts[4])
     console.log("Consumer: accounts[5] ", accounts[5])
 
+    // 1st Error Test
+    it("Testing smart contract modifier hasUPC() ", async() => {
+        const supplyChain = await SupplyChain.deployed()
+
+        try{ 
+            // Passing 0 as the value for the UPC
+            await supplyChain.fetchItemBufferOne(0)
+
+            assert.fail('UPC validation failed');
+        }
+        catch(error){
+            ;//do nothing
+        }
+
+    })   
+
     // 1st Test
     it("Testing smart contract function harvestItem() that allows a grower to harvest coffee", async() => {
         const supplyChain = await SupplyChain.deployed()
@@ -75,6 +91,7 @@ contract('SupplyChain', function(accounts) {
         assert.equal(resultBufferTwo[5], 0, 'Error: Invalid item State')
         assert.equal(eventEmitted, true, 'Invalid event emitted')        
     })    
+
 
     // 2 Test
     it("Testing smart contract function hullItem() that allows a grower to hull coffee", async() => {

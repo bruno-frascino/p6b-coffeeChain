@@ -190,6 +190,13 @@ contract SupplyChain is Ownable {
     _;
   }
 
+  // Check input parameter is not empty
+  modifier hasUPC(uint _upc) {
+    require(_upc > 0, 'UPC cannot be empty or 0');
+    _;
+  }
+  
+
   // In the constructor set 'owner' to the address that instantiated the contract
   // and set 'sku' to 1
   // and set 'upc' to 1
@@ -207,9 +214,14 @@ contract SupplyChain is Ownable {
   // Define a function 'harvestItem' that allows a grower to mark an item 'Harvested'
   function harvestItem(uint _upc, address _originGrowerID, string _originGrowerName, 
     string _originGrowerInformation, string  _originGrowerLatitude, string  _originGrowerLongitude, 
-    string  _productNotes) public 
+    string  _productNotes) public hasUPC(_upc)
   {
     
+    require(_originGrowerID > 0x0, 'Grower ID cannot be empty');
+    require(bytes(_originGrowerName).length > 0, 'Grower name cannot be empty');
+    require(bytes(_originGrowerLatitude).length > 0, 'Grower latitude cannot be empty');
+    require(bytes(_originGrowerLongitude).length > 0, 'Grower longitude cannot be empty');
+
     Item memory harvestedOne;
     
     harvestedOne.upc = _upc;
@@ -234,7 +246,7 @@ contract SupplyChain is Ownable {
   }
 
   // Define a function 'hullItem' that allows a grower to mark an item 'Hulled'
-  function hullItem(uint _upc) public harvested(_upc) onlyGrower()
+  function hullItem(uint _upc) public hasUPC(_upc) harvested(_upc) onlyGrower()
   // Call modifier to check if upc has passed previous supply chain stage
   
   // Call modifier to verify caller of this function
@@ -248,7 +260,7 @@ contract SupplyChain is Ownable {
   }
 
   // Define a function 'dryItem' that allows a grower to mark an item 'Dried'
-  function dryItem(uint _upc) public hulled(_upc) onlyGrower()
+  function dryItem(uint _upc) public hasUPC(_upc) hulled(_upc) onlyGrower()
   // Call modifier to check if upc has passed previous supply chain stage
   
   // Call modifier to verify caller of this function
@@ -262,7 +274,7 @@ contract SupplyChain is Ownable {
   }
 
   // Define a function 'cropPackItem' that allows a grower to mark an item 'CropPacked'
-  function cropPackItem(uint _upc) public dried(_upc) onlyGrower()
+  function cropPackItem(uint _upc) public hasUPC(_upc) dried(_upc) onlyGrower()
   // Call modifier to check if upc has passed previous supply chain stage
   
   // Call modifier to verify caller of this function
@@ -276,7 +288,7 @@ contract SupplyChain is Ownable {
   }
 
   // Define a function 'sellCropItem' that allows a grower to mark an item 'CropForSale'
-  function sellCropItem(uint _upc, uint _price) cropPacked(_upc) onlyGrower() public 
+  function sellCropItem(uint _upc, uint _price) public hasUPC(_upc) cropPacked(_upc) onlyGrower() 
   // Call modifier to check if upc has passed previous supply chain stage
   
   // Call modifier to verify caller of this function
@@ -292,7 +304,7 @@ contract SupplyChain is Ownable {
   // Define a function 'buyCropItem' that allows the Intermediary to mark an item 'InterItem'
   // Use the above defined modifiers to check if the item is available for sale, if the buyer has paid enough, 
   // and any excess ether sent is refunded back to the buyer
-  function buyCropItem(uint _upc) onlyIntermediary() paidEnough(_upc) checkValue(_upc) payable public 
+  function buyCropItem(uint _upc) payable public hasUPC(_upc) onlyIntermediary() paidEnough(_upc) checkValue(_upc)
     
     //Call modifer to check if buyer has paid enough
     
@@ -313,7 +325,7 @@ contract SupplyChain is Ownable {
 
 
   // Define a function 'sellInterItem' that allows a grower to mark an item 'InterForSale'
-  function sellInterItem(uint _upc, uint _price) interItem(_upc) onlyIntermediary() public 
+  function sellInterItem(uint _upc, uint _price) public hasUPC(_upc) interItem(_upc) onlyIntermediary()
   // Call modifier to check if upc has passed previous supply chain stage
   
   // Call modifier to verify caller of this function
@@ -329,7 +341,8 @@ contract SupplyChain is Ownable {
   // Define a function 'buyInterItem' that allows the Intermediary to mark an item 'RoastItem'
   // Use the above defined modifiers to check if the item is available for sale, if the buyer has paid enough, 
   // and any excess ether sent is refunded back to the buyer
-  function buyInterItem(uint _upc) interForSale(_upc) onlyRoaster() paidEnough(_upc) checkValue(_upc) payable public 
+  function buyInterItem(uint _upc)  payable 
+    public hasUPC(_upc) interForSale(_upc) onlyRoaster() paidEnough(_upc) checkValue(_upc)
     
     // Call modifer to check if buyer has paid enough
     
@@ -349,7 +362,7 @@ contract SupplyChain is Ownable {
   }
 
   // Define a function 'roast' that allows a Roaster to mark an item 'Roasted'
-  function roast(uint _upc) public roastItem(_upc) onlyRoaster()
+  function roast(uint _upc) public hasUPC(_upc) roastItem(_upc) onlyRoaster()
   // Call modifier to check if upc has passed previous supply chain stage
   
   // Call modifier to verify caller of this function
@@ -363,7 +376,7 @@ contract SupplyChain is Ownable {
   }
 
   // Define a function 'roastPack' that allows a roaster to mark an item 'RoastPacked'
-  function roastPack(uint _upc) public roasted(_upc) onlyRoaster()
+  function roastPack(uint _upc) public hasUPC(_upc) roasted(_upc) onlyRoaster()
   // Call modifier to check if upc has passed previous supply chain stage
   
   // Call modifier to verify caller of this function
@@ -377,7 +390,7 @@ contract SupplyChain is Ownable {
   }
 
   // Define a function 'sellRoastItem' that allows a roaster to mark an item 'RoastForSale'
-  function sellRoastItem(uint _upc, uint _price) roastPacked(_upc) onlyRoaster() public 
+  function sellRoastItem(uint _upc, uint _price) public hasUPC(_upc) roastPacked(_upc) onlyRoaster()
   // Call modifier to check if upc has passed previous supply chain stage
   
   // Call modifier to verify caller of this function
@@ -393,7 +406,8 @@ contract SupplyChain is Ownable {
   // Define a function 'buyRoastItem' that allows the Retailer to mark an item 'RetailerItem'
   // Use the above defined modifiers to check if the item is available for sale, if the buyer has paid enough, 
   // and any excess ether sent is refunded back to the buyer
-  function buyRoastItem(uint _upc) roastForSale(_upc) onlyRetailer() paidEnough(_upc) checkValue(_upc) payable public 
+  function buyRoastItem(uint _upc) payable 
+    public hasUPC(_upc) roastForSale(_upc) onlyRetailer() paidEnough(_upc) checkValue(_upc)
     
     // Call modifer to check if buyer has paid enough
     
@@ -413,7 +427,7 @@ contract SupplyChain is Ownable {
   }
 
   // Define a function 'sellItem' that allows a retailer to mark an item 'ForSale'
-  function sellItem(uint _upc, uint _price) retailerItem(_upc) onlyRetailer() public 
+  function sellItem(uint _upc, uint _price) public hasUPC(_upc) retailerItem(_upc) onlyRetailer()
   // Call modifier to check if upc has passed previous supply chain stage
   
   // Call modifier to verify caller of this function
@@ -428,7 +442,8 @@ contract SupplyChain is Ownable {
   
   // Define a function 'purchaseItem' that allows the consumer to mark an item 'Purchased'
   // Use the above modifiers to check if the item is received
-  function purchaseItem(uint _upc) forSale(_upc) onlyConsumer() paidEnough(_upc) checkValue(_upc) payable public 
+  function purchaseItem(uint _upc) payable 
+    public hasUPC(_upc) forSale(_upc) onlyConsumer() paidEnough(_upc) checkValue(_upc)
     // Call modifier to check if upc has passed previous supply chain stage
     
     // Access Control List enforced by calling Smart Contract / DApp
@@ -442,7 +457,7 @@ contract SupplyChain is Ownable {
   }
 
   // Define a function 'fetchItemBufferOne' that fetches the data
-  function fetchItemBufferOne(uint _upc) public view returns 
+  function fetchItemBufferOne(uint _upc) public view hasUPC(_upc) returns 
   (
   uint    itemSKU,
   uint    itemUPC,
@@ -478,7 +493,7 @@ contract SupplyChain is Ownable {
   }
 
   // Define a function 'fetchItemBufferTwo' that fetches the data
-  function fetchItemBufferTwo(uint _upc) public view returns 
+  function fetchItemBufferTwo(uint _upc) public view hasUPC(_upc) returns 
   (
   uint    itemSKU,
   uint    itemUPC,

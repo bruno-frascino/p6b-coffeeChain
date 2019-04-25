@@ -17,12 +17,15 @@
     </div>
 
     <div id="ftc-harvest">
-        <h2>Product Overview</h2>
+        <h2>Product Overview</h2> 
+        <span id="it-state"></span>
         <div class="form-group">
+
+            <p><small style="color:red">(*) Required fields</small></p>
             SKU
             <br>
             <input class="input-field" type="number" id="sku" name="sku" value=1><br>
-            UPC
+            UPC <span style="color:red">*</span>
             <br>
             <input type="number" id="upc" name="upc" value=1><br>
             Current Owner ID
@@ -37,20 +40,20 @@
         <div class=form-break></div>
         <h2>Grower Details</h2>
         <div class="form-group">
-            Grower ID
+            Grower ID <span style="color:red">*</span>
             <br>
             <input type="text" id="originGrowerID" name="originGrowerID" value="0" size="50">
             <br>
-            Grower Name
+            Grower Name <span style="color:red">*</span>
             <br>
             <input type="text" id="originGrowerName" name="originGrowerName" value="John Doe"><br>
             Grower Information
             <br>
             <input type="text" id="originGrowerInformation" name="originGrowerInformation" value="Yarra Valley"><br>
-            Grower Latitude
+            Grower Latitude <span style="color:red">*</span>
             <br>
             <input type="text" id="originGrowerLatitude" name="originGrowerLatitude" value="-38.239770"><br>
-            Grower Longitude
+            Grower Longitude <span style="color:red">*</span>
             <br>
             <input type="text" id="originGrowerLongitude" name="originGrowerLongitude" value="144.341490"><br>
             <br>

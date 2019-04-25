@@ -205,6 +205,8 @@ App = {
 
             App.originGrowerID = App.metamaskAccountID;
             $("#originGrowerID").val(App.originGrowerID);
+            $("#it-state").html("Item state: <b>Harvested</b>");
+            console.log('Item state: ' + result[5]);
 
         }).catch(function(err) {
             console.log(err.message);
@@ -220,6 +222,7 @@ App = {
         }).then(function(result) {
             $("#ftc-item").text(result);
             console.log('hullItem',result);
+            $("#it-state").html("Item state: <b>Hulled</b>");
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -234,6 +237,7 @@ App = {
         }).then(function(result) {
             $("#ftc-item").text(result);
             console.log('dryItem',result);
+            $("#it-state").html("Item state: <b>Dried</b>");
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -248,6 +252,7 @@ App = {
         }).then(function(result) {
             $("#ftc-item").text(result);
             console.log('cropPackItem',result);
+            $("#it-state").html("Item state: <b>CropPacked</b>");
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -264,6 +269,7 @@ App = {
         }).then(function(result) {
             $("#ftc-item").text(result);
             console.log('sellCropItem',result);
+            $("#it-state").html("Item state: <b>CropForSale</b>");
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -279,6 +285,8 @@ App = {
         }).then(function(result) {
             $("#ftc-item").text(result);
             console.log('buyCropItem',result);
+
+            App.fetchItemBufferTwo(App.upc);
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -295,6 +303,8 @@ App = {
         }).then(function(result) {
             $("#ftc-item").text(result);
             console.log('sellInterItem',result);
+
+            $("#it-state").html("Item state: <b>InterForSale</b>");
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -310,6 +320,8 @@ App = {
         }).then(function(result) {
             $("#ftc-item").text(result);
             console.log('buyInterItem',result);
+
+            App.fetchItemBufferTwo(App.upc);
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -324,6 +336,8 @@ App = {
         }).then(function(result) {
             $("#ftc-item").text(result);
             console.log('roast',result);
+
+            $("#it-state").html("Item state: <b>Roasted</b>");
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -338,6 +352,8 @@ App = {
         }).then(function(result) {
             $("#ftc-item").text(result);
             console.log('roastPack',result);
+
+            $("#it-state").html("Item state: <b>RoastPacked</b>");
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -354,6 +370,8 @@ App = {
         }).then(function(result) {
             $("#ftc-item").text(result);
             console.log('sellRoastItem',result);
+
+            $("#it-state").html("Item state: <b>RoastForSale</b>");
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -369,6 +387,8 @@ App = {
         }).then(function(result) {
             $("#ftc-item").text(result);
             console.log('buyRoastItem',result);
+
+            App.fetchItemBufferTwo(App.upc);
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -385,6 +405,8 @@ App = {
         }).then(function(result) {
             $("#ftc-item").text(result);
             console.log('sellItem',result);
+
+            $("#it-state").html("Item state: <b>ForSale</b>");
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -401,6 +423,8 @@ App = {
         }).then(function(result) {
             $("#ftc-item").text(result);
             console.log('purchaseItem',result);
+
+            App.fetchItemBufferTwo(App.upc);
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -450,13 +474,66 @@ App = {
           //productID
           //$("#productID").val(result[2]);
           console.log('Product Id: ' + result[2]);
-          //productNotes
-          $("#productNotes").val(result[3]);
+          
+        //productNotes
+        $("#productNotes").val(result[3]);
+        //only update price field when is for consumer purchase
+        if( App.retailerID != '0x0000000000000000000000000000000000000000'){
           //productPrice
           $("#productPrice").val(result[4]);
+        }
           //itemState
-          //$("#itemState").val(result[5]);
-          console.log('Item state: ' + result[5]);
+          let itState = '';
+          let r = '' + result[5];
+          switch( r ) {
+            case '0':
+                itState = "Harvested";
+                break;
+            case '1':
+                itState = "Hulled";
+                break;
+            case '2':
+                itState = "Dried";
+                break;
+            case '3':
+                itState = "CropPacked";
+                break;
+            case '4':
+                itState = "CropForSale";
+                break;
+            case '5':
+                itState = "InterItem";
+                break;
+            case '6':
+                itState = "InterForSale";
+                break;
+            case '7':
+                itState = "RoastItem";
+                break;
+            case '8':
+                itState = "Roasted";
+                break;
+            case '9':
+                itState = "RoastPacked";
+                break;
+            case '10':
+                itState = "RoastForSale";
+                break;
+            case '11':
+                itState = "RetailerItem";
+                break;
+            case '12':
+                itState = "ForSale";
+                break;
+            case '13':
+                itState = "Purchased";
+                break;
+          }
+          //only after first interaction
+          if( App.originGrowerID != '0x0000000000000000000000000000000000000000' ){
+            $("#it-state").html("Item state: <b>"+ itState +"</b>");
+            console.log('Item state: ' + result[5]);
+          }
           //intermediaryID
           $("#intermediaryID").val(result[6]);
           //roasterID

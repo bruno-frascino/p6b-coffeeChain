@@ -4,10 +4,10 @@ This is an Ethereum DApp that demonstrates the stages of the Coffee Supply Chain
 
 ## Dependencies
 
-Node.js            v10.15.1
-Ganache-CLI        v6.1.8
-Truffle            v4.1.14
-Metamask           Chrome extension
+- Node.js            v10.15.1
+- Ganache-CLI        v6.1.8
+- Truffle            v4.1.14
+- Metamask           Chrome extension
 
 ## Installation
 
@@ -43,7 +43,7 @@ http://localhost:3000
 
 Connect to Metamask and let the app connect to your metamask address. Then select `Rinkeby Test Network` from the dropdown menu at the top.
 
-Now your are ready to use to interact with the system.
+Now your are ready to interact with the contracts.
 
 ## Running Tests
 

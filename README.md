@@ -45,6 +45,19 @@ Connect to Metamask and let the app connect to your metamask address. Then selec
 
 Now your are ready to interact with the contracts.
 
+## Contract on Rinkeby
+The contract addres on Rinkeby is: 
+
+_0x2c9bcdc20befedb1bb619bbfbaa8bf9db0e9a038_
+
+The transaction Id is: 
+
+_0x800c339f7afc2978d922733e1a0901b252daa137f80d211d86d8871c86e169d8_
+
+Etherscan link:
+
+https://rinkeby.etherscan.io/address/0x2c9bcdc20befedb1bb619bbfbaa8bf9db0e9a038
+
 ## Running Tests
 
 Make sure your ganache-cli is running, you need an Ethereum client to run the tests, if you need to start it just on a Terminal window run: 
